@@ -59,15 +59,15 @@ Entry_for_name.grid(row=0, column=0, padx=4, pady=2)
 frame_for_selections = LabelFrame(main_page, text="Pasirinkite paslaugas")
 frame_for_selections.grid(row=2, column=1, padx=3, pady=3)
 
-dropdown_UG = ttk.Combobox(frame_for_selections, values=["Vienas", "Du", "Trys", "Keturi", "Penki"])
+dropdown_UG = ttk.Combobox(frame_for_selections, values=["","Vienas", "Du", "Trys", "Keturi", "Penki"])
 dropdown_UG.grid(row=0, column=0, padx=3, pady=3)  
 # dropdown_UG.current(0) 
 
-dropdown_LAZER = ttk.Combobox(frame_for_selections, values=["Vienas", "Du", "Trys", "Keturi", "Penki"])
+dropdown_LAZER = ttk.Combobox(frame_for_selections, values=["","Vienas", "Du", "Trys", "Keturi", "Penki"])
 dropdown_LAZER.grid(row=1, column=0, padx=3, pady=3)  
 # dropdown_LAZER.current(0) 
 
-dropdown_MASAGE = ttk.Combobox(frame_for_selections, values=["Vienas", "Du", "Trys", "Keturi", "Penki"])
+dropdown_MASAGE = ttk.Combobox(frame_for_selections, values=["","Vienas", "Du", "Trys", "Keturi", "Penki"])
 dropdown_MASAGE.grid(row=2, column=0, padx=3, pady=3)  
 # dropdown_MASAGE.current(0) 
 
