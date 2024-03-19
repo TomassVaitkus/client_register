@@ -80,3 +80,6 @@ registry_button.grid(row=0, column=0, padx=3, pady=3, sticky=NE)
 
 notebook.pack(fill=BOTH, expand=1)
 root.mainloop()
+    
+
+    
