@@ -21,13 +21,11 @@ class Klientai(Base):
 
 engine = create_engine('sqlite:///client_register.db')  
 
-def register(engine):
-    engine=engine  
-    Base.metadata.create_all(engine)  
+def register():
+    Base.metadata.create_all(engine)
     
     Session = sessionmaker(bind=engine)
     session = Session() 
-    
 
     new_client = Klientai(entry=Entry_for_name.get(),
                           dropdown_ug=dropdown_UG.get(),
@@ -44,41 +42,16 @@ def get_table_as_dataframe(table_name, connection_string):
         df = pd.read_sql_table(table_name, connection)
     return df
 
-df = get_table_as_dataframe('klientai', 'sqlite:///client_register.db')
+df = get_table_as_dataframe('klientai', 'sqlite:///client_register.db').iloc[: , 1:]
 
 root = Tk()
 root.title("Kazkokios klinikos registracijos ir paslaugų aplikacija")
 root.geometry('650x615')
 root.resizable(True, True)
 
-notebook = ttk.Notebook(root)  # Sukurkite notebook'ą čia
+notebook = ttk.Notebook(root)
 
-tree_frame = ttk.Frame(notebook)
-tree_frame.pack(fill='both', expand=True)
-tree = ttk.Treeview(tree_frame)
-tree.pack(fill='both', expand=True)
-tree["columns"]=("id","entry","dropdown_ug","dropdown_LAZER", "dropdown_MASAGE")
-
-tree.column("id", width=100)
-tree.column("entry", width=100)
-tree.column("dropdown_ug", width=100)
-tree.column("dropdown_LAZER", width=100)
-tree.column("dropdown_MASAGE", width=100)
-
-tree.heading("id", text="Stulpelis 0")
-tree.heading("entry", text="Stulpelis 1")
-tree.heading("dropdown_ug", text="Stulpelis 2")
-tree.heading("dropdown_LAZER", text="Stulpelis 3")
-tree.heading("dropdown_MASAGE", text="Stulpelis 3")
-
-records = df.to_records(index=False)
-final_records = list(records)
-count = 0
-for row in final_records:
-    list_of_row = list(row)
-    tree.insert(parent='', index='end', iid=count, text='', values=list_of_row, tags=('evenrow'))
-    count += 1  # Padidinkite count reikšmę kiekvieno įrašo įterpimo metu
-
+# Paciento registravimo puslapis
 main_page = ttk.Frame(notebook)
 notebook.add(main_page, text='Paciento registravimas paslaugai')
 
@@ -108,6 +81,46 @@ frame_for_buttons.grid(row=3, column=1, padx=3, pady=3)
 
 registry_button = Button(frame_for_buttons, text="Registruoti", command=register)
 registry_button.grid(row=0, column=0, padx=3, pady=3, sticky=NE)
+
+# Treeview puslapis
+tree_frame = ttk.Frame(notebook)
+notebook.add(tree_frame, text='Treeview')
+
+tree = ttk.Treeview(tree_frame, height=27)
+tree.pack(fill='both', expand=True)
+tree["columns"]=("entry","dropdown_ug","dropdown_LAZER", "dropdown_MASAGE")
+
+tree.column('#0', width=0, stretch=False)
+tree.column("entry", width=100, anchor=W, stretch=True)
+tree.column("dropdown_ug", width=100, anchor=W, stretch=True)
+tree.column("dropdown_LAZER", width=100, anchor=W, stretch=True)
+tree.column("dropdown_MASAGE", width=100, anchor=W, stretch=True)
+
+tree.heading('#0', text='', anchor=W)
+tree.heading("entry", text="Stulpelis 1", anchor=CENTER)
+tree.heading("dropdown_ug", text="Stulpelis 2", anchor=CENTER)
+tree.heading("dropdown_LAZER", text="Stulpelis 3", anchor=CENTER)
+tree.heading("dropdown_MASAGE", text="Stulpelis 4", anchor=CENTER)
+
+# scroll = Scrollbar(tree_frame, orient=VERTICAL, command=tree.yview)
+# scroll.pack(side=RIGHT, fill=Y)
+
+# horscr = Scrollbar(tree_frame, orient= HORIZONTAL, command=tree.xview)
+# horscr.pack(side=BOTTOM, fill=X)
+
+# tree.configure(yscrollcommand=scroll.set, xscrollcommand=horscr.set)
+records = df.to_records(index=False)
+final_records = list(records)
+count = 0
+tree.tag_configure('oddrow', background='white')
+tree.tag_configure('evenrow', background='whitesmoke')
+for row in final_records:
+    list_of_row = list(row)
+    if count % 2 == 0:
+        tree.insert(parent='', index='end', iid=count, text='', values=list_of_row, tags=('evenrow'))
+    else:
+        tree.insert(parent='', index='end', iid=count, text='', values=list_of_row, tags=('oddrow'))
+    count += 1
 
 notebook.pack(fill=BOTH, expand=1)
 root.mainloop()
